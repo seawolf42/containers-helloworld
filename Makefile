@@ -14,7 +14,7 @@ DOCKER=docker
 #
 
 .PHONY: build
-build: build.process build.task build.webserver
+build: build.process build.task build.webserver build.socketserver
 
 BUILD_NAME = $(patsubst build.%,%,$@)
 
@@ -30,3 +30,9 @@ RUN_NAME = $(patsubst run.%,%,$@)
 
 run.%:
 	${DOCKER} run --rm helloworld-${RUN_NAME}
+
+run.socketserver:
+	${DOCKER} run --rm -p 8765:8765 helloworld-socketserver
+
+run.webserver:
+	${DOCKER} run --rm -p 8000:8000 helloworld-webserver
