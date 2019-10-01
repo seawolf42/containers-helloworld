@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import asyncio
+import http
+
 import websockets
 
 
@@ -15,8 +17,14 @@ async def echo(websocket, path):
         pass
 
 
+async def process_request(path, headers):
+    if path == '/healthz':
+        return (http.HTTPStatus.OK, (), b'success')
+    return None
+
+
 def main():
-    start_server = websockets.serve(echo, '0.0.0.0', 8765)
+    start_server = websockets.serve(echo, '0.0.0.0', 8765, process_request=process_request)
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
 
